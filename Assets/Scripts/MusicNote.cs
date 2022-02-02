@@ -12,7 +12,8 @@ public class MusicNote : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(keyToPress) && canBePressed)
+        // Fixed a bug where you could still hit notes from Paused GameState.
+        if (Input.GetKeyDown(keyToPress) && canBePressed && GameStateManager.Instance.CurrentGameState == GameState.Gameplay)
         {
             // Hide the note when pressed
             gameObject.SetActive(false);
@@ -35,7 +36,6 @@ public class MusicNote : MonoBehaviour
                 GameManager.s_gameInstance.NoteHit(HitType.Perfect);
                 Instantiate(perfectEffect, transform.position, perfectEffect.transform.rotation);
             }
-            // GameManager.s_gameInstance.NoteHit(HitType.Good);
         }
     }
 

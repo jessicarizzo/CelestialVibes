@@ -1,6 +1,7 @@
 using System;
 using Constants;
 using Enums;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,11 @@ public class GameManager : MonoBehaviour
 {
     public AudioSource music;
     public bool hasMusicStarted;
+    public GameState gameState;
     public BeatScroller beatScroller;
+    public uint gameLevel;
+    public TextMeshProUGUI levelDescriptionText;
+    public TextMeshProUGUI startInstructionsText;
     public static GameManager s_gameInstance;
     public Text scoreText;
     public Text multiplierText;
@@ -31,15 +36,31 @@ public class GameManager : MonoBehaviour
     public GameObject resultsScreen;
     public Text percentHitsText, normalHitsText, goodHitsText, perfectHitsText, missedHitsText, rankText, finalScoreText;
     #endregion
+    
+    public GameObject pauseMenu;
+
+    void Awake()
+    {
+        // Subscribe to the change state event
+        GameStateManager.Instance.OnGameStateChanged += OnGameStateChanged;
+    }
+
+    private void OnDestroy()
+    {
+        // Handle any memory leaks
+        GameStateManager.Instance.OnGameStateChanged -= OnGameStateChanged;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
+        GameObject pauseMenuInstance = Instantiate(pauseMenu);
+        DontDestroyOnLoad(pauseMenuInstance);
+        
         s_gameInstance = this;
         m_totalNotes = FindObjectsOfType<MusicNote>().Length;
         scoreText.text = "Chill Meter: 0";
-        
-        ResetScoreMultiplier();
+        levelDescriptionText.text = $"{levelDescriptionText.text} {gameLevel}";
     }
 
     // Update is called once per frame
@@ -49,15 +70,31 @@ public class GameManager : MonoBehaviour
         {
             if (Input.anyKeyDown)
             {
+                GameStateManager.Instance.SetState(GameState.Gameplay);
+                startInstructionsText.enabled = false;
                 hasMusicStarted = true;
                 beatScroller.hasStarted = true;
-
                 music.Play();
-            }   
+            }
         }
-        else if(!music.isPlaying && !resultsScreen.activeInHierarchy) 
+        else if(!music.isPlaying && !resultsScreen.activeInHierarchy && gameState != GameState.Paused) 
         {
             DisplayScoreBoard();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            // Capture game state
+            GameState currentGameState = GameStateManager.Instance.CurrentGameState;
+            GameState newGameState = currentGameState == GameState.Gameplay
+                ? GameState.Paused
+                : GameState.Gameplay;
+                
+            // Set listener awareness of the instance to the new game state
+            GameStateManager.Instance.SetState(newGameState);
+            
+            // Track state for the unity editor
+            gameState = newGameState;
         }
     }
 
@@ -104,7 +141,7 @@ public class GameManager : MonoBehaviour
         UpdateScore(scoreValue);
         RecordHitTypes(hitType);
     }
-
+    
     private void UpdateScore(int score)
     {
         m_currentScore += score * m_currentMultiplier;
@@ -175,6 +212,31 @@ public class GameManager : MonoBehaviour
         else
         {
             return "F";
+        }
+    }
+
+    private void SetIsPauseMenuDisplayed(bool value)
+    {
+        // Instantiate(pauseMenu);
+        pauseMenu.SetActive(value);
+    }
+
+    private void OnGameStateChanged(GameState newGameState)
+    {
+        // enabled = newGameState == GameState.Gameplay;
+        
+        // Control game behaviors based on state
+        if (GameStateManager.Instance.CurrentGameState == GameState.Paused)
+        {
+            music.Pause();
+            beatScroller.hasStarted = false;
+            SetIsPauseMenuDisplayed(true);
+        }
+        else
+        {
+            music.UnPause();
+            beatScroller.hasStarted = true;
+            SetIsPauseMenuDisplayed(false);
         }
     }
 }

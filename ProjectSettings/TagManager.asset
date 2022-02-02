@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Activator
+  - Song1
+  - Song2
   layers:
   - Default
   - TransparentFX
@@ -12,7 +14,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - UI Pause
   - 
   - 
   - 
