@@ -43300,6 +43300,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1643481210}
+    - target: {fileID: 3962444874831722110, guid: e8617ca809953f84587a2edef3515636, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3962444875603808481, guid: e8617ca809953f84587a2edef3515636, type: 3}
       propertyPath: m_Name
       value: ScoreboardCanvas
