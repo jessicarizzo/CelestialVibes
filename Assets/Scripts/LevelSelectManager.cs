@@ -13,7 +13,7 @@ public class LevelSelectManager : MonoBehaviour
     public void LoadNextLevel()
     {
         var nextLevelIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        var canPlayNextLevel = SceneManager.sceneCountInBuildSettings < nextLevelIndex;
+        var canPlayNextLevel = nextLevelIndex < SceneManager.sceneCountInBuildSettings;
 
         if (canPlayNextLevel)
         {
