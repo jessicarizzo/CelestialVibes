@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637794407784478761
-    m_Hash: 1252515213
+      ticks: 637794540186560392
+    m_Hash: 2541160277
   m_LockFileStatus:
     m_FilePath: C:/GameJam/CelestialVibes/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637794407784738761
-    m_Hash: 980525655
+      ticks: 637794540186580396
+    m_Hash: 4124027762
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_PackageAssets:
