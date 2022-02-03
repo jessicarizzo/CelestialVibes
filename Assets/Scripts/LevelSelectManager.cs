@@ -18,7 +18,6 @@ public class LevelSelectManager : MonoBehaviour
         if (canPlayNextLevel)
         {
             SceneManager.LoadScene(nextLevelIndex);
-            // This is a test!
         }
         else
         {
